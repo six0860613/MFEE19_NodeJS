@@ -7,6 +7,9 @@ const app = express();
 //設定樣板
 app.set('view engine', 'ejs');
 
+//在進入路由前就設定body-parser，先進行解析
+app.use(express.urlencoded({extended: false})); //urlencoded解析
+app.use(express.json()); //json解析
 //設定靜態內容的資料夾
 app.use('/',express.static(__dirname + '/public'));
 // app.use('/jquery', express.static('node_modules/jquery/dist')); 可以引用node_modules
@@ -28,6 +31,19 @@ app.get('/json-sales', (_req, _res)=>{
 app.get('/try-qs', (_req, _res)=>{
     _res.json(_req.query); //把網址中?後的get資料傳遞包成query物件
 });
+
+//設定POST的打包方式與POST傳遞 (利用body-parser處理)
+// const urlencodedParser = express.urlencoded({extended: false});
+// const jsonParser = express.json();
+// app.post('/try-post', [urlencodedParser, jsonParser], (_req, _res)=>{
+//     _res.json(_req.body); //發出的request會放在body物件內，所以response轉換的標的就是req.body
+// });
+app.post('/try-post', (_req, _res)=>{
+    _res.json(_req.body); //發出的request會放在body物件內，所以response轉換的標的就是req.body
+});
+
+
+
 
 //設定路由 end
 app.use( (_req, _res)=>{
