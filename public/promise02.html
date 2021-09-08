@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+<body>
+    <h1>Promise</h1>
+
+    <script>
+        const rand = 300 + Math.floor(Math.random()*1000);
+        //非同步的promise部分
+        const promise = new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve(rand);
+                // reject('錯誤!!');
+            },rand);
+        }).then(r=>{
+            console.log('2:', r, new Date());
+        }).then(r=>{
+            console.log('3:', r, new Date());
+            return 100;
+        }).then(r=>{
+            console.log('4:', r, new Date());
+        }).catch(error=>{
+            console.log('error message: ', error);
+        });
+
+        //一般的程式部分
+        console.log('1:', new Date());
+
+    </script>
+</body>
+</html>

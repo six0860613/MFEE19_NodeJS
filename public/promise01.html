@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+<body>
+    <h1>Promise</h1>
+
+    <script>
+        
+        //非同步的promise部分
+        const promise = new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve('test');
+                // reject('錯誤!!');
+            },1000);
+        }).then(r=>{
+            console.log('2:', r, new Date());
+            throw new Error('throw錯誤!!'); //throw錯誤時，error以下的程式碼不執行
+            console.log('3:', r, new Date());
+        }).catch(error=>{
+            console.log('error message: ', error); //如果在throw有設定Error，則套用，反之套用reject
+        });
+
+        //一般的程式部分
+        console.log('1:', new Date());
+
+    </script>
+</body>
+</html>

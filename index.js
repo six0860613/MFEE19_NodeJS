@@ -43,6 +43,19 @@ app.post('/try-post', (_req, _res)=>{
 });
 
 
+//form的發送
+app.get('/try-post-form', (_req, _res)=>{
+    _res.render('try-post-form');
+});
+
+app.post('/try-post-form', (_req, _res)=>{
+    _res.render('try-post-form', _req.body);
+});
+
+//等待中要做的事
+app.get('/pending', (_req, _res)=>{
+    
+});
 
 
 //設定路由 end
