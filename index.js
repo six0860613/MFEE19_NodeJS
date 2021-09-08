@@ -92,6 +92,18 @@ app.post('/try-upload3', uploadImg.array('photo', 10), async (req, res)=>{
 app.get('/my-params1/:action?/:id(\\d+)?', (_req, _res)=>{
     _res.json(_req.params);
 });
+app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (_req, _res)=>{
+    let u = _req.url.split('?')[0];
+    u = u.slice(3);
+    u = u.split('-').join('');
+    _res.json({
+        'url': _req.url,
+        'mobile': u,
+    });
+});
+
+//將路由的內容模組化
+app.use(require(__dirname + '/routers/admin'));
 
 
 //設定路由 end

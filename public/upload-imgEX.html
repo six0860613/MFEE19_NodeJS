@@ -15,7 +15,9 @@
             <div class="col-md-6">
                 <form name="fake_form" onsubmit="return false;">
                     <!-- 設定filename的欄位 -->
-                    <img src="" alt="" width="300px" id="img01">
+                    <div class="img-group d-flex">
+                        <!-- <img src="" alt="" width="300px" id="img01"> -->
+                    </div>
                     <!-- 點擊是呼叫下面display none的form1表單 -->
                     <button type="button" class="btn btn-success" onclick="photo.click()">上傳大頭貼</button>
                     <div class="mb-3">
@@ -44,8 +46,13 @@
                 body: fd,
             });
             const result = await response.json();
-            document.querySelector('#img01').src = '/img/' + result[0].filename;
-            document.fake_form.my_img.value = result[0].filename;
+            // $('.img-group').append(`<img src="./img/${result[0].filename}" alt="" width="300px" id="img01">`);
+            for(let val of result){
+                $('.img-group').append(`<img src="./img/${val.filename}" alt="" width="100px" id="img01">`);
+                $('#my_img').parent().append(`<input type="text" class="form-control" value="${val.filename}">`);
+            }
+            // document.querySelector('#img01').src = '/img/' + result[0].filename;
+            // document.fake_form.my_img.value = result[0].filename;
         });
     </script>
 </body>
