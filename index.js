@@ -2,8 +2,11 @@ require('dotenv').config(); //使用dotenv的套件去載入.env檔案
 
 //建立web server
 const express = require('express');
-const app = express();
+const multer = require('multer');
+const upload = multer({dest: __dirname + '/tmp_uploads/'})
+const fs = require('fs').promises;
 
+const app = express();
 //設定樣板
 app.set('view engine', 'ejs');
 
@@ -54,6 +57,24 @@ app.post('/try-post-form', (_req, _res)=>{
 
 //等待中要做的事
 app.get('/pending', (_req, _res)=>{
+    
+});
+
+
+//檔案upload
+app.post('/try-upload', upload.single('avatar'), async (_req, _res)=>{
+    if(_req.file && _req.file.mimetype==='image/jpeg'){
+        try{
+             //上傳後的搬運，不經過tmp_uploads
+            await fs.rename(_req.file.path, __dirname + '/public/img/'+ _req.file.originalname);
+            return _res.json({success: true, filename: _req.file.originalname});
+        } catch(error){
+            return _res.json({success: false, error: '無法存檔'});
+        }
+    }else{
+        await fs.unlink(_req.file.path); //如果格式錯誤則不上傳至tmp_uploads
+        _res.json({success: false, error: '格式非jpeg'});
+    }
     
 });
 
