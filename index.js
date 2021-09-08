@@ -5,6 +5,7 @@ const express = require('express');
 const multer = require('multer');
 const upload = multer({dest: __dirname + '/tmp_uploads/'})
 const fs = require('fs').promises;
+const uploadImg = require('./modules/upload-images');
 
 const app = express();
 //設定樣板
@@ -72,10 +73,24 @@ app.post('/try-upload', upload.single('avatar'), async (_req, _res)=>{
             return _res.json({success: false, error: '無法存檔'});
         }
     }else{
-        await fs.unlink(_req.file.path); //如果格式錯誤則不上傳至tmp_uploads
+        // await fs.unlink(_req.file.path); //如果格式錯誤則不上傳至tmp_uploads
         _res.json({success: false, error: '格式非jpeg'});
     }
     
+});
+
+//使用multer模組上傳圖片
+app.post('/try-upload2', uploadImg.single('avatar'), async (req, res)=>{
+    res.json(req.file);
+});
+
+app.post('/try-upload3', uploadImg.array('photo', 10), async (req, res)=>{
+    res.json(req.files);
+});
+
+//params可以直接記住/:的字串(:後的內容為key)，加上問號就可以為空，沒加直接訪問時會404 ex:/my-params1/edit/123
+app.get('/my-params1/:action?/:id(\\d+)?', (_req, _res)=>{
+    _res.json(_req.params);
 });
 
 
