@@ -1,3 +1,7 @@
 express
 ejs
 multer
+uuid
+express-session
+moment-timezone
+mysql2
