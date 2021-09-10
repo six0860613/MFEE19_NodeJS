@@ -5,10 +5,12 @@ const express = require('express');
 const session = require('express-session');
 const multer = require('multer');
 const moment = require('moment-timezone');
+const MysqlStore = require('express-mysql-session')(session);
 const upload = multer({dest: __dirname + '/tmp_uploads/'})
 const fs = require('fs').promises;
 const uploadImg = require('./modules/upload-images');
 const db = require('./modules/connect-mysql');
+const session_store = new MysqlStore({}, db);
 
 const app = express();
 //設定樣板
@@ -23,9 +25,14 @@ app.use('/',express.static(__dirname + '/public'));
 // app.use('/jquery', express.static('node_modules/jquery/dist')); 可以引用node_modules
 // app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
-//通用的變數
+//通用的middleware變數
 app.use((_req, _res, next)=>{
     _res.locals.title = 'My Website';
+    _res.locals.pageName = '';
+
+    //定義可在ejs中使用的一些funciton
+    _res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
+    _res.locals.dateToDateTimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
     next();
 });
 
@@ -34,6 +41,7 @@ app.use(session({
     saveUninitialized: false, //強制把未初始化的session存回
     resave: false, //強制存回session空間，即便沒有變動
     secret: 'wbaigvno248g03u0gu-atu-21th34o9rgna', //隨便打的加密字串
+    store: session_store,
     cookie:{
         maxAge: 1200000, //session存活時間，單位毫秒
     }
@@ -47,6 +55,7 @@ app.get('/', (_req, _res)=>{
 });
 
 app.get('/json-sales', (_req, _res)=>{
+    _res.locals.pageName = 'json-sales';
     const sales = require('./data/sales.json');
     // console.log(sales);
     // _res.json(sales);
@@ -126,6 +135,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (_req, _res)=>{
 //將路由的內容模組化
 app.use(require(__dirname + '/routers/admin'));
 app.use('/admin2', require(__dirname + '/routers/admin2'));
+app.use('/address-book', require(__dirname + '/routers/address-book'));
 
 //session
 app.get('/try-sess', (_req, _res)=>{
