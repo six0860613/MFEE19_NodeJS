@@ -1,0 +1,63 @@
+<%- include('../parts/html-head') %>
+<%- include('../parts/navbar') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">編輯通訊錄資料</h5>
+                    <form name="form1" onsubmit="checkForm(); return false;">
+                        <div class="mb-3">
+                          <label for="name" class="form-label">姓名</label>
+                          <input value="<%= row.name %>" type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">信箱</label>
+                            <input value="<%= row.email %>" type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">手機</label>
+                            <input value="<%= row.mobile %>" type="text" class="form-control" id="mobile" name="mobile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">生日</label>
+                            <input value="<%= dateToDateString(row.birthday) %>" type="date" class="form-control" id="birthday" name="birthday">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">地址</label>
+                            <textarea class="form-control" name="address" id="address" cols="30" rows="3"><%= row.address %></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">變更</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../parts/scripts') %>
+<script>
+    function checkForm(){
+        const fd = new FormData(document.form1);
+
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(fd).toString(),
+        })
+        .then(r=>r.json())
+        .then(obj=>{
+            console.log(JSON.stringify(obj, null, 4));
+            if(obj.success){
+                alert('修改成功');
+            }else{
+                alert(obj.error) || '修改失敗';
+            }
+        });
+    }
+</script>
+
+<%- include('../parts/html-foot') %>

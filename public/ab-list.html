@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>address-book list</title>
+
+    <link rel="stylesheet" href="./vendor/bootstrap-4.2.1-dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!-- <li class="page-item">
+                        <a class="page-link" href="?page=0">Previous</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="?page=1">1</a>
+                    </li>                  
+                    <li class="page-item">
+                        <a class="page-link" href="?page=2">Next</a>
+                    </li> -->
+                </ul>
+            </nav>
+        </div>
+        <!-- <textarea name="" id="ta" cols="80" rows="30"></textarea> -->
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">刪除</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">姓名</th>
+                        <th scope="col">信箱</th>
+                        <th scope="col">手機</th>
+                        <th scope="col">生日</th>
+                        <th scope="col">地址</th>
+                        <th scope="col">編輯</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <script src="./vendor/jquery-3.6.0.min.js"></script>
+    <script src="./vendor/bootstrap-4.2.1-dist/js/bootstrap.min.js"></script>
+    <script>
+        const pageTemp = obj => {
+            return `
+            <li class="page-item ${obj.active}">
+                <a class="page-link" href="javascript: getListData({page: ${obj.page}})">${obj.page}</a>
+            </li>
+            `;
+        };
+
+        const itemTemp = obj => {
+
+            return `
+            <tr>
+                <td>
+                    <a href="javascript: delete_it(${obj.sid})">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+                <td>${obj.sid}</td>
+                <td>${obj.name}</td>
+                <td>${obj.email}</td>
+                <td>${obj.mobile}</td>
+                <td>${obj.birthday}</td>
+                <td>${obj.address}</td>
+                <td>
+                    <a href="/address-book/edit/${obj.sid}">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+            `;
+        }
+
+        const render = (data) => {
+            //表格內容
+            let str = '';
+            if (data.rows && data.rows.length) {
+                data.rows.forEach(element => {
+                    str += itemTemp(element);
+                });
+            }
+            document.querySelector('tbody').innerHTML = str;
+            // 簡潔寫法
+            // document.querySelector('tbody').innerHTML = data.rows.map(e=>itemTemp(e)).join('');
+
+            //頁碼指示器
+            str = '';
+            for (let i = data.page - 5; i <= data.page + 5; i++) {
+                if (i >= 1 && i <= data.totalPages) {
+                    str += pageTemp({
+                        active: data.page === i ? 'active' : '',
+                        page: i,
+                    })
+                }
+            }
+            document.querySelector('.pagination').innerHTML = str;
+        }
+        const getListData = (opt = {}) => {
+            opt.page = opt.page || 1;
+            opt.keyword = opt.keyword || '';
+            const usp = new URLSearchParams();
+            usp.set('page', opt.page);
+            if (opt.keyword) {
+                usp.set('keyword', opt.keyword);
+            }
+
+            fetch('/address-book/api/list?' + usp.toString())
+                .then(r => r.json())
+                .then(data => {
+                    console.log(data);
+                    render(data);
+                });
+        }
+
+        getListData();
+
+    </script>
+</body>
+
+</html>

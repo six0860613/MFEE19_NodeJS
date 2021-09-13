@@ -29,6 +29,7 @@ app.use('/',express.static(__dirname + '/public'));
 app.use((_req, _res, next)=>{
     _res.locals.title = 'My Website';
     _res.locals.pageName = '';
+    _res.locals.keyword = '';
 
     //定義可在ejs中使用的一些funciton
     _res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
