@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            height: 800px;
+            width: 300px;
+            background-color: #e6adad;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<div id="info">
+    <a href="javascript: pushS('/b1')">b1</a>
+    <a href="javascript: pushS('/b2')">b2</a>
+    <a href="javascript: pushS('/b3')">b3</a>
+</div>
+
+<script>
+
+    const pushS = (url)=>{
+        history.pushState({time: Date.now(), url}, '', url);
+    };
+
+    window.addEventListener('popstate', event =>{
+        console.log(event.state); // 出現history變更時就會印出 ex:點上一頁
+    });
+
+
+</script>
+</body>
+</html>

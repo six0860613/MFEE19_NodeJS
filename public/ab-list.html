@@ -8,6 +8,7 @@
     <title>address-book list</title>
 
     <link rel="stylesheet" href="./vendor/bootstrap-4.2.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./vendor/fontawesome-5.15.4/css/all.css">
 
 </head>
 
@@ -168,7 +169,18 @@
                 });
         }
 
-        getListData();
+        //頁碼切換+頁面產生(預設傳入第一頁)
+        const whenHashChanged = () => {
+            console.log(location.hash);
+
+            let h = location.hash.slice(1); //去掉最前面的#號
+            h = parseInt(h) || 1; //取得頁碼數字
+            getListData({page: h}); //傳入getListData
+        };
+
+        window.addEventListener('hashchange', whenHashChanged);
+
+        whenHashChanged();
 
     </script>
 </body>
