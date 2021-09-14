@@ -5,6 +5,7 @@ const express = require('express');
 const session = require('express-session');
 const multer = require('multer');
 const moment = require('moment-timezone');
+const cors = require('cors');
 const MysqlStore = require('express-mysql-session')(session);
 const upload = multer({dest: __dirname + '/tmp_uploads/'})
 const fs = require('fs').promises;
@@ -19,6 +20,16 @@ app.set('view engine', 'ejs');
 //在進入路由前就設定body-parser，先進行解析
 app.use(express.urlencoded({extended: false})); //urlencoded解析
 app.use(express.json()); //json解析
+
+//cors的白名單設定(因瀏覽器本身不允許伺服器同意所有來源)
+const corsOptions = {
+    credentials: true,
+    origin: (origin, cb)=>{
+        console.log(`origin: ${origin}`);
+        cb(null, true);
+    },
+}
+app.use(cors(corsOptions)); //解決跨網域的cors錯誤
 
 //設定靜態內容的資料夾
 app.use('/',express.static(__dirname + '/public'));

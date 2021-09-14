@@ -161,7 +161,7 @@
                 usp.set('keyword', opt.keyword);
             }
 
-            fetch('/address-book/api/list?' + usp.toString())
+            fetch('http://localhost:3001/address-book/api/list?' + usp.toString())
                 .then(r => r.json())
                 .then(data => {
                     console.log(data);

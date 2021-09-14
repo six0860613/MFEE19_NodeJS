@@ -6,3 +6,4 @@ express-session
 moment-timezone
 mysql2
 express-mysql-session
+cors
