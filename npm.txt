@@ -7,3 +7,5 @@ moment-timezone
 mysql2
 express-mysql-session
 cors
+bcryptjs
+jsonwebtoken

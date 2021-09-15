@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+
+    <link rel="stylesheet" href="./vendor/bootstrap-4.2.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./vendor/fontawesome-5.15.4/css/all.css">
+
+</head>
+
+<body>
+<style>
+    .navbar-nav .nav-item .active{
+        background-color: #afa;
+        border-radius: 10px;
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">NodeJs</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link " href="/json-sales">業務列表</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/address-book/list">通訊錄</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/address-book/add">新增通訊錄資料</a>
+            </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link active" href="/login">登入</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/register">註冊</a>
+                </li>
+            
+        </ul>
+        <!-- action設定搜尋欄位的套用路徑 -->
+        <form class="d-flex" action="/address-book/list"> 
+            <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" >
+                <div class="card-body">
+                    <h5 class="card-title">DATA JWT</h5>
+
+                    <textarea name="ta" id="ta" cols="50" rows="10"></textarea>
+                    <button type="button" class="btn btn-primary" onclick="getData();">GET DATA</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="./vendor/jquery-3.6.0.min.js"></script>
+<script src="./vendor/bootstrap-4.2.1-dist/js/bootstrap.min.js"></script>
+<script>
+    const ta = document.querySelector('#ta');
+
+    function getData(){
+        const token = localStorage.getItem('token');
+        if(!token){
+            alert('未通過token驗證');
+            return;
+        }
+
+        fetch('/get-data-jwt',{
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer '+ token //Authorization就是認證
+            },
+        }).then(r=>r.json()).then(obj=>{
+            ta.value = JSON.stringify(obj, null, 4);
+        });
+    }
+
+</script>
+</body>
+
+</html>

@@ -48,7 +48,7 @@ async function getListData( _req, _res){
     }
     return output;
 }
-
+router.getListData = getListData; //在router上使用一個與function相同的變數
 
 router.get('/', (_req, _res)=>{
     _res.render('address-book/main');

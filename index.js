@@ -12,6 +12,7 @@ const fs = require('fs').promises;
 const uploadImg = require('./modules/upload-images');
 const db = require('./modules/connect-mysql');
 const session_store = new MysqlStore({}, db);
+const jwt = require('jsonwebtoken');
 
 const app = express();
 //設定樣板
@@ -36,18 +37,6 @@ app.use('/',express.static(__dirname + '/public'));
 // app.use('/jquery', express.static('node_modules/jquery/dist')); 可以引用node_modules
 // app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 
-//通用的middleware變數
-app.use((_req, _res, next)=>{
-    _res.locals.title = 'My Website';
-    _res.locals.pageName = '';
-    _res.locals.keyword = '';
-
-    //定義可在ejs中使用的一些funciton
-    _res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
-    _res.locals.dateToDateTimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
-    next();
-});
-
 //設定session的預設值
 app.use(session({
     saveUninitialized: false, //強制把未初始化的session存回
@@ -59,6 +48,34 @@ app.use(session({
     }
 }));
 
+
+//通用的middleware變數
+app.use(async (_req, _res, next)=>{
+    _res.locals.title = 'My Website';
+    _res.locals.pageName = '';
+    _res.locals.keyword = '';
+
+    //定義可在ejs中使用的一些funciton
+    _res.locals.dateToDateString = d => moment(d).format('YYYY-MM-DD');
+    _res.locals.dateToDateTimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
+
+    _res.locals.session = _req.session; //把session的資料傳入EJS
+
+    //jwt驗證
+    _req.myAuth = null; //自訂一個auth在request上，發送request時就會先跑這段auth驗證
+    const auth = _req.get('Authorization');
+    if(auth && auth.indexOf('Bearer '===0)){ //驗證Authorization是不是自己設定的
+        const token = auth.slice(7);
+        try {
+            _req.myAuth = await jwt.verify(token, process.env.JWT_SECRET);
+            console.log(_req.myAuth);
+        } catch (error) {
+            console.log('token有誤:', error);
+        }
+    }
+    
+    next();
+});
 
 //路由 start
 app.get('/', (_req, _res)=>{
@@ -148,6 +165,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (_req, _res)=>{
 app.use(require(__dirname + '/routers/admin'));
 app.use('/admin2', require(__dirname + '/routers/admin2'));
 app.use('/address-book', require(__dirname + '/routers/address-book'));
+app.use('/', require(__dirname +'/routers/login'));
 
 //session
 app.get('/try-sess', (_req, _res)=>{
