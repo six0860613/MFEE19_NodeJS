@@ -26,6 +26,7 @@
     "moment-timezone": "^0.5.33",
     "multer": "^1.4.3",
     "mysql2": "^2.3.0",
+    "soundoftext-js": "^1.0.2",
     "uuid": "^8.3.2"
   }
 }
