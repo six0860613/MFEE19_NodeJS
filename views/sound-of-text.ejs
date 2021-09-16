@@ -1,22 +1,156 @@
 <%- include('parts/html-head') %>
 <%- include('parts/navbar') %>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card" >
-                <div class="card-body">
-                    <h5 class="card-title">音訊</h5>
-                    <button type="button" class="btn btn-primary">TEST</button>
-                </div>
-            </div>
+<style>
+    .question-pic {
+        height: 200px;
+        margin-right: 20px;
+    }
 
+    .question-pic img {
+        height: 100%;
+    }
+
+    .question-text>span {
+        font-size: 20px;
+        border: 2px solid gray;
+        border-radius: 10px;
+        padding: 10px;
+        position: relative;
+    }
+
+    .question-text>span::before {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0;
+        top: 50%;
+        left: -20px;
+        transform: translateY(-50%);
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent gray transparent transparent;
+    }
+
+    .question-text>span::after {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0;
+        top: 50%;
+        left: -15px;
+        transform: translateY(-50%);
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent white transparent transparent;
+    }
+
+    .answer, .selectWord {
+        min-height: 100px;
+        width: 100%;
+        margin: 20px 0px;
+        padding: 20px;
+        background-color: rgb(235, 235, 235);
+        border: 2px solid gray;
+        border-left: transparent;
+        border-right: transparent;
+        display: flex;
+    }
+
+    .word{
+        background-color: #afa;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 15px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+    .word-bg {
+        background-color: rgb(148, 148, 148);
+        border: 1px solid black;
+        border-radius: 10px;
+        margin: 0px 5px;
+    }
+
+    .word:hover {
+        opacity: 0.6;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-3">
+    <div class="row my-3">
+        <h3>用英文拼出此句子</h3>
+    </div>
+    <div class="row">
+        <div class="question-pic"><img src="/img/01.png" alt=""></div>
+        <div class="question-text d-flex align-items-center"><span>我喜歡吃義大利麵</span></div>
+    </div>
+    <div class="row answer">
+    </div>
+    <div class="row selectWord">
+        <div class="word-bg">
+            <div class="word">like</div>
+        </div>
+        <div class="word-bg">
+            <div class="word">I</div>
+        </div>
+        <div class="word-bg">
+            <div class="word">spaghetti</div>
+        </div>
+        <div class="word-bg">
+            <div class="word">to</div>
+        </div>
+        <div class="word-bg">
+            <div class="word">eat</div>
         </div>
     </div>
 </div>
 <%- include('parts/scripts') %>
 <script>
-    
+    $('.container').on('click', '.word', function (e) {
+        // console.log($(this).text().toString());
+        if($(this).parent().hasClass('word-bg')){
+            $(this).css('opacity', 0);
+            wordSound(e);
+            // const wLeft = $(this).position().left;
+            // const wTop = $(this).position().top;
+            $(this).clone().appendTo($('.answer')).css('opacity', 1).css('margin', '0px 5px');
+        }else{
+            const content = $(this).text().toString();
+            $('.word-bg>.word').each(function(){
+                // console.log($(this).text());
+                if(content === $(this).text()){
+                    $(this).css('opacity', 1);
+                }
+            });
+            $(this).remove();
+        }
+    });
+
+    function wordSound(e){
+        const word = e.target.innerText;
+        //urlencoded法
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: word,
+        }).then(r=>r.json()).then(obj=>{
+            console.log(JSON.stringify(obj, null, 4));
+            if(obj.success){
+                const audio = new Audio(`https://storage.soundoftext.com/${obj.id}.mp3`);
+                audio.play();
+            }else{
+                alert('發送失敗');
+            }
+        });
+    };
 
 </script>
 <%- include('parts/html-foot') %>

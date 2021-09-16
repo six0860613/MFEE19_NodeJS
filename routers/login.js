@@ -5,18 +5,20 @@ const db = require('./../modules/connect-mysql');
 const upload = require('./../modules/upload-images');
 const router = express.Router();
 
-const client = require('soundoftext-js');
-
 const { getListData } = require('./address-book');
+
 //SOT
-router.get('/sound-of-text', (_req, _res)=>{
-    client.sounds.request({ text: 'Hello, world!', voice: 'en-US' })
+const client = require('soundoftext-js');
+router.get('/sound-of-text', (_req, _res) => {
+    _res.locals.pageName = 'sound-of-text';
+    _res.render('sound-of-text');
+});
+router.post('/sound-of-text', async (_req, _res)=>{
+    const [word] = Object.keys(_req.body);
+    
+    await client.sounds.request({ text: word, voice: 'en-US' })
     .then(response => {
-        return client.sounds.location({ id: response.id });
-    })
-    .then(location => {
-        console.log(location); // https://soundoftext.nyc3.digitaloceanspaces.com/<sound-id>.mp3
-        _res.json(location);
+        _res.json(response);
     })
     .catch(e => {
         console.log(e);
