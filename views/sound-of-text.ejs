@@ -3,134 +3,198 @@
 
 <style>
     .question-pic {
-        height: 200px;
-        margin-right: 20px;
-    }
+            height: 200px;
+            margin-right: 20px;
+        }
 
-    .question-pic img {
-        height: 100%;
-    }
+        .question-pic img {
+            height: 100%;
+        }
 
-    .question-text>span {
-        font-size: 20px;
-        border: 2px solid gray;
-        border-radius: 10px;
-        padding: 10px;
-        position: relative;
-    }
+        .question-text>span {
+            font-size: 20px;
+            border: 2px solid gray;
+            border-radius: 10px;
+            padding: 10px;
+            position: relative;
+        }
 
-    .question-text>span::before {
-        position: absolute;
-        content: "";
-        width: 0;
-        height: 0;
-        top: 50%;
-        left: -20px;
-        transform: translateY(-50%);
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent gray transparent transparent;
-    }
+        .question-text>span::before {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent gray transparent transparent;
+        }
 
-    .question-text>span::after {
-        position: absolute;
-        content: "";
-        width: 0;
-        height: 0;
-        top: 50%;
-        left: -15px;
-        transform: translateY(-50%);
-        border-width: 8px;
-        border-style: solid;
-        border-color: transparent white transparent transparent;
-    }
+        .question-text>span::after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: -15px;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent white transparent transparent;
+        }
 
-    .answer, .selectWord {
-        min-height: 100px;
-        width: 100%;
-        margin: 20px 0px;
-        padding: 20px;
-        background-color: rgb(235, 235, 235);
-        border: 2px solid gray;
-        border-left: transparent;
-        border-right: transparent;
-        display: flex;
-    }
+        .answer,
+        .selectWord {
+            min-height: 100px;
+            width: 100%;
+            margin: 20px 0px;
+            padding: 20px;
+            /* background-color: rgba(235, 235, 235, 0.561); */
+            border: 2px solid gray;
+            border-left: transparent;
+            border-right: transparent;
+            display: flex;
+            box-sizing: border-box;
+        }
 
-    .word{
-        background-color: #afa;
-        border: 1px solid black;
-        border-radius: 10px;
-        padding: 15px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.3s ease;
-    }
-    .word-bg {
-        background-color: rgb(148, 148, 148);
-        border: 1px solid black;
-        border-radius: 10px;
-        margin: 0px 5px;
-    }
+        .word {
+            background-color: #afa;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-    .word:hover {
-        opacity: 0.6;
-    }
+        .word-bg {
+            background-color: rgb(148, 148, 148, 0.5);
+            border-radius: 10px;
+            margin: 0px 5px;
+        }
+
+        .word:hover {
+            opacity: 0.6;
+        }
+
+        .animationWord {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(255, 193, 193);
+        }
 </style>
 
 </head>
 
 <body>
 
-<div class="container mt-3">
-    <div class="row my-3">
-        <h3>用英文拼出此句子</h3>
+    <div class="container mt-3">
+        <div class="row my-3">
+            <h3>用英文拼出此句子</h3>
+        </div>
+        <div class="row">
+            <div class="question-pic"><img src="/img/01.png" alt=""></div>
+            <div class="question-text d-flex align-items-center"><span>我喜歡吃義大利麵</span></div>
+        </div>
+        <div class="row" style="position: relative;">
+            <div class="answer">
+            </div>
+            <div class="selectWord">
+                <div class="word-bg">
+                    <div class="word">like</div>
+                </div>
+                <div class="word-bg">
+                    <div class="word">I</div>
+                </div>
+                <div class="word-bg">
+                    <div class="word">spaghetti</div>
+                </div>
+                <div class="word-bg">
+                    <div class="word">to</div>
+                </div>
+                <div class="word-bg">
+                    <div class="word">eat</div>
+                </div>
+            </div>
+            <div class="animationWord"></div>
+        </div>
     </div>
-    <div class="row">
-        <div class="question-pic"><img src="/img/01.png" alt=""></div>
-        <div class="question-text d-flex align-items-center"><span>我喜歡吃義大利麵</span></div>
-    </div>
-    <div class="row answer">
-    </div>
-    <div class="row selectWord">
-        <div class="word-bg">
-            <div class="word">like</div>
-        </div>
-        <div class="word-bg">
-            <div class="word">I</div>
-        </div>
-        <div class="word-bg">
-            <div class="word">spaghetti</div>
-        </div>
-        <div class="word-bg">
-            <div class="word">to</div>
-        </div>
-        <div class="word-bg">
-            <div class="word">eat</div>
-        </div>
-    </div>
-</div>
 <%- include('parts/scripts') %>
 <script>
-    $('.container').on('click', '.word', function (e) {
-        // console.log($(this).text().toString());
-        if($(this).parent().hasClass('word-bg')){
-            $(this).css('opacity', 0);
-            wordSound(e);
-            // const wLeft = $(this).position().left;
-            // const wTop = $(this).position().top;
-            $(this).clone().appendTo($('.answer')).css('opacity', 1).css('margin', '0px 5px');
-        }else{
-            const content = $(this).text().toString();
-            $('.word-bg>.word').each(function(){
-                // console.log($(this).text());
-                if(content === $(this).text()){
-                    $(this).css('opacity', 1);
+    let transitionSec = 300; //word飛行動畫時間
+        $('.container').on('click', '.word', function (e) {
+            if ($(this).parent().hasClass('word-bg')) {
+                wordSound(e);
+                // 把原本的word藏起來
+                $(this).css('opacity', 0).prop('disabled', true);
+                const wordToUp = $(this).clone().appendTo($('.answer')).css('opacity', 0).css('margin', '0px 5px');
+                // 原word在下層的座標
+                const dLeft = $(this).position().left;
+                const dTop = $(this).position().top;
+                // 已經先UP的word的座標
+                const wLeft = $(wordToUp).position().left + 5; //word-bg的margin額外加到wordToUp的margin
+                const wTop = $(wordToUp).position().top;
+                //取得word寬度
+                const wordWidth = $(this).width() + parseInt($(this).css('padding-left')) + parseInt($(this).css('padding-right'));
+                //複製一個word到底層當動畫
+                let newWord = $(this).clone().appendTo($('.animationWord')).css('width', `${wordWidth}px`).css('position', 'absolute').css('transition', `${transitionSec / 1000}s`);
+                // 複製過的word擺好位置
+                function wordAnimation() {
+                    newWord.css('opacity', 1).css('transform', `translate(${dLeft}px, ${dTop}px)`);
                 }
-            });
-            $(this).remove();
-        }
-    });
+                function wordMoving() {
+                    setTimeout(() => {
+                        newWord.css('transform', `translate(${wLeft}px, ${wTop}px)`);
+                    }, 4);
+                }
+                function wordUp() {
+                    setTimeout(() => {
+                        newWord.remove();
+                        wordToUp.css('opacity', 1);
+                    }, transitionSec);
+                }
+
+                async function word() {
+                    await wordAnimation();
+                    await wordMoving();
+                    await wordUp();
+                }
+                word();
+
+            } else {
+                const content = $(this).text().toString();
+                // 查看上層word的座標
+                const uLeft = $(this).position().left;
+                const uTop = $(this).position().top;
+                //取得word寬度
+                const wordWidth = $(this).width() + parseInt($(this).css('padding-left')) + parseInt($(this).css('padding-right'));
+
+                //複製一個word到底層當動畫
+                let newWord = $(this).clone().appendTo($('.animationWord')).css('width', `${wordWidth}px`).css('position', 'absolute').css('transition', `${transitionSec / 1000}s`);
+                newWord.css('opacity', 1).css('transform', `translate(${uLeft}px, ${uTop}px)`);
+
+                $('.word-bg>.word').each(function () {
+                    if (content === $(this).text()) {
+                        //this = 下層對應word
+                        // 查看下層word的座標
+                        const wLeft = $(this).position().left - 5;
+                        const wTop = $(this).position().top;
+                        setTimeout(() => {
+                            newWord.css('transform', `translate(${wLeft}px, ${wTop}px)`);
+                        }, 4);
+                        setTimeout(() => {
+                            newWord.remove();
+                            $(this).css('opacity', 1).prop('disabled', false);
+                        }, transitionSec);
+                    }
+                });
+                $(this).remove();
+            }
+        });
 
     function wordSound(e){
         const word = e.target.innerText;
