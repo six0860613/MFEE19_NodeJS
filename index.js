@@ -166,6 +166,7 @@ app.use(require(__dirname + '/routers/admin'));
 app.use('/admin2', require(__dirname + '/routers/admin2'));
 app.use('/address-book', require(__dirname + '/routers/address-book'));
 app.use('/', require(__dirname +'/routers/login'));
+app.use('/product', require(__dirname + '/routers/product'));
 
 //session
 app.get('/try-sess', (_req, _res)=>{
