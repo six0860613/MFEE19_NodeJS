@@ -192,6 +192,13 @@ app.get('/try-db', async (_req, _res)=>{
     _res.json(result);
 });
 
+// 測試用 純返回資料&存入資料表
+app.post('/test_avatar', uploadImg.none(), async (req, res)=>{
+    const sql = "INSERT INTO `test_avatar`(`avatar`, `name`) VALUES (?, ?)";
+    const [r] = await db.query(sql, [req.body.avatar, req.body.name]);
+    res.json(r);
+})
+
 //路由 end
 app.use( (_req, _res)=>{
     _res.status(404).send(`<h1>找不到頁面</h1>`);
