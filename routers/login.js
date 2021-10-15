@@ -105,6 +105,7 @@ router.post('/login-jwt', async (_req, _res)=>{
     const output = {
         success: false,
         token: null,
+        member: null,
     };
 
     const [rs] = await db.query("SELECT * FROM members WHERE `email`=?", [_req.body.email]);
