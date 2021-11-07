@@ -168,6 +168,8 @@ app.use('/address-book', require(__dirname + '/routers/address-book'));
 app.use('/', require(__dirname +'/routers/login'));
 app.use('/product', require(__dirname + '/routers/product'));
 app.use('/cart', require(__dirname + '/routers/cart'));
+app.use('/message', require(__dirname + '/routers/message'));
+app.use('/conversation', require(__dirname + '/routers/conversation'));
 
 //session
 app.get('/try-sess', (_req, _res)=>{
